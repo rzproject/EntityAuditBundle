@@ -272,6 +272,7 @@ class AuditReader extends BaseAuditReader
         $query = $this->platform->modifyLimitQuery(
             "SELECT * FROM " . $this->config->getRevisionTableName() . " ORDER BY id DESC", $limit, $offset
         );
+
         $revisionsData = $this->auditEm->getConnection()->fetchAll($query);
 
         $revisions = array();
@@ -282,6 +283,7 @@ class AuditReader extends BaseAuditReader
                 $row['username']
             );
         }
+
         return $revisions;
     }
 
@@ -329,9 +331,10 @@ class AuditReader extends BaseAuditReader
                 }
             }
 
-            $this->platform = $this->sourceEm->getConnection()->getDatabasePlatform();
+            $this->platform = $this->auditEm->getConnection()->getDatabasePlatform();
             $query = "SELECT " . $columnList . " FROM " . $tableName . " e WHERE " . $whereSQL;
-            $revisionsData = $this->sourceEm->getConnection()->executeQuery($query, array($revision));
+
+            $revisionsData = $this->auditEm->getConnection()->executeQuery($query, array($revision));
 
             foreach ($revisionsData AS $row) {
                 $id   = array();
