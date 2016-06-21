@@ -1,0 +1,27 @@
+{
+    "name": "rz/entity-audit-bundle",
+    "type": "symfony-bundle",
+    "description": "Extends SimpleThingsEntityAuditBundle to allow audit tables on alternative connection or separate DB",
+    "keywords": ["symfony2", "rz-project"],
+    "homepage": "https://github.com/rzproject/EntityAuditBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "mell zamora",
+            "email": "mellzamora@outlook.com",
+            "homepage": "https://github.com/rzproject"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "simplethings/entity-audit-bundle": "~0.5"
+    },
+    "autoload": {
+        "psr-4": { "Rz\\EntityAuditBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.0.x-dev"
+        }
+    }
+}
