@@ -146,10 +146,10 @@ class AuditReader extends BaseAuditReader
 
         $whereSQL  = "e." . $this->config->getRevisionFieldName() ." <= ?";
 
-        foreach ($class->identifier AS $idField) {
+        foreach ($class->identifier as $idField) {
             if (isset($class->fieldMappings[$idField])) {
                 $columnName = $class->fieldMappings[$idField]['columnName'];
-            } else if (isset($class->associationMappings[$idField])) {
+            } elseif (isset($class->associationMappings[$idField])) {
                 $columnName = $class->associationMappings[$idField]['joinColumns'][0];
             }
 
@@ -170,8 +170,8 @@ class AuditReader extends BaseAuditReader
             $columnMap[$field] = $this->platform->getSQLResultCasing($columnName);
         }
 
-        foreach ($class->associationMappings AS $assoc) {
-            if ( ($assoc['type'] & ClassMetadata::TO_ONE) == 0 || !$assoc['isOwningSide']) {
+        foreach ($class->associationMappings as $assoc) {
+            if (($assoc['type'] & ClassMetadata::TO_ONE) == 0 || !$assoc['isOwningSide']) {
                 continue;
             }
 
@@ -236,7 +236,7 @@ class AuditReader extends BaseAuditReader
                             $associatedId[$targetClass->fieldNames[$targetColumn]] = $joinColumnValue;
                         }
                     }
-                    if ( ! $associatedId) {
+                    if (! $associatedId) {
                         // Foreign key is NULL
                         $class->reflFields[$field]->setValue($entity, null);
                     } else {
@@ -276,7 +276,7 @@ class AuditReader extends BaseAuditReader
         $revisionsData = $this->auditEm->getConnection()->fetchAll($query);
 
         $revisions = array();
-        foreach ($revisionsData AS $row) {
+        foreach ($revisionsData as $row) {
             $revisions[] = new Revision(
                 $row['id'],
                 \DateTime::createFromFormat($this->platform->getDateTimeFormatString(), $row['timestamp']),
@@ -307,7 +307,7 @@ class AuditReader extends BaseAuditReader
         $auditedEntities = $this->metadataFactory->getAllClassNames();
 
         $changedEntities = array();
-        foreach ($auditedEntities AS $className) {
+        foreach ($auditedEntities as $className) {
             $class = $this->sourceEm->getClassMetadata($className);
             $tableName = $this->config->getTablePrefix() . $class->table['name'] . $this->config->getTableSuffix();
 
@@ -322,8 +322,8 @@ class AuditReader extends BaseAuditReader
                 $columnMap[$field] = $this->platform->getSQLResultCasing($columnName);
             }
 
-            foreach ($class->associationMappings AS $assoc) {
-                if ( ($assoc['type'] & ClassMetadata::TO_ONE) > 0 && $assoc['isOwningSide']) {
+            foreach ($class->associationMappings as $assoc) {
+                if (($assoc['type'] & ClassMetadata::TO_ONE) > 0 && $assoc['isOwningSide']) {
                     foreach ($assoc['targetToSourceKeyColumns'] as $sourceCol) {
                         $columnList .= ', ' . $sourceCol;
                         $columnMap[$sourceCol] = $this->platform->getSQLResultCasing($sourceCol);
@@ -336,11 +336,11 @@ class AuditReader extends BaseAuditReader
 
             $revisionsData = $this->auditEm->getConnection()->executeQuery($query, array($revision));
 
-            foreach ($revisionsData AS $row) {
+            foreach ($revisionsData as $row) {
                 $id   = array();
                 $data = array();
 
-                foreach ($class->identifier AS $idField) {
+                foreach ($class->identifier as $idField) {
                     $id[$idField] = $row[$idField];
                 }
 
@@ -396,13 +396,13 @@ class AuditReader extends BaseAuditReader
         }
 
         $whereSQL = "";
-        foreach ($class->identifier AS $idField) {
+        foreach ($class->identifier as $idField) {
             if (isset($class->fieldMappings[$idField])) {
                 if ($whereSQL) {
                     $whereSQL .= " AND ";
                 }
                 $whereSQL .= "e." . $class->fieldMappings[$idField]['columnName'] . " = ?";
-            } else if (isset($class->associationMappings[$idField])) {
+            } elseif (isset($class->associationMappings[$idField])) {
                 if ($whereSQL) {
                     $whereSQL .= " AND ";
                 }
@@ -417,7 +417,7 @@ class AuditReader extends BaseAuditReader
 
         $revisions = array();
         $this->platform = $this->auditEm->getConnection()->getDatabasePlatform();
-        foreach ($revisionsData AS $row) {
+        foreach ($revisionsData as $row) {
             $revisions[] = new Revision(
                 $row['id'],
                 \DateTime::createFromFormat($this->platform->getDateTimeFormatString(), $row['timestamp']),
@@ -449,13 +449,13 @@ class AuditReader extends BaseAuditReader
         }
 
         $whereSQL = "";
-        foreach ($class->identifier AS $idField) {
+        foreach ($class->identifier as $idField) {
             if (isset($class->fieldMappings[$idField])) {
                 if ($whereSQL) {
                     $whereSQL .= " AND ";
                 }
                 $whereSQL .= "e." . $class->fieldMappings[$idField]['columnName'] . " = ?";
-            } else if (isset($class->associationMappings[$idField])) {
+            } elseif (isset($class->associationMappings[$idField])) {
                 if ($whereSQL) {
                     $whereSQL .= " AND ";
                 }
@@ -511,7 +511,7 @@ class AuditReader extends BaseAuditReader
         $fields = $metadata->getFieldNames();
 
         $return = array();
-        foreach ($fields AS $fieldName) {
+        foreach ($fields as $fieldName) {
             $return[$fieldName] = $metadata->getFieldValue($entity, $fieldName);
         }
 
@@ -532,10 +532,10 @@ class AuditReader extends BaseAuditReader
         }
 
         $whereId = array();
-        foreach ($class->identifier AS $idField) {
+        foreach ($class->identifier as $idField) {
             if (isset($class->fieldMappings[$idField])) {
                 $columnName = $class->fieldMappings[$idField]['columnName'];
-            } else if (isset($class->associationMappings[$idField])) {
+            } elseif (isset($class->associationMappings[$idField])) {
                 $columnName = $class->associationMappings[$idField]['joinColumns'][0];
             } else {
                 continue;
@@ -559,8 +559,8 @@ class AuditReader extends BaseAuditReader
             $columnMap[$field] = $this->platform->getSQLResultCasing($columnName);
         }
 
-        foreach ($class->associationMappings AS $assoc) {
-            if ( ($assoc['type'] & ClassMetadata::TO_ONE) == 0 || !$assoc['isOwningSide']) {
+        foreach ($class->associationMappings as $assoc) {
+            if (($assoc['type'] & ClassMetadata::TO_ONE) == 0 || !$assoc['isOwningSide']) {
                 continue;
             }
 

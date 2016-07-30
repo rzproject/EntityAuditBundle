@@ -45,7 +45,7 @@ class CreateSchemaListener implements EventSubscriber
             $revisionTable = $schema->createTable(
                 $this->config->getTablePrefix().$entityTable->getName().$this->config->getTableSuffix()
             );
-            foreach ($entityTable->getColumns() AS $column) {
+            foreach ($entityTable->getColumns() as $column) {
                 /* @var $column Column */
                 $revisionTable->addColumn($column->getName(), $column->getType()->getName(), array_merge(
                     $column->toArray(),

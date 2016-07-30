@@ -13,7 +13,7 @@ class Revision extends BaseRevision
     protected $timestamp;
     protected $username;
 
-    function __construct($rev, $timestamp, $username)
+    public function __construct($rev, $timestamp, $username)
     {
         $this->rev = $rev;
         $this->timestamp = $timestamp;
@@ -67,6 +67,4 @@ class Revision extends BaseRevision
     {
         $this->username = $username;
     }
-
-
 }

@@ -79,9 +79,7 @@ class SchemaTool
         $conn = $this->auditEm->getConnection();
 
         foreach ($createSchemaSql as $sql) {
-
             try {
-
                 $conn->executeQuery($sql);
             } catch (\Exception $e) {
                 throw ToolsException::schemaToolFailure($sql, $e);
@@ -177,7 +175,7 @@ class SchemaTool
                 // Add all non-inherited fields as columns
                 $pkColumns = array();
                 foreach ($class->fieldMappings as $fieldName => $mapping) {
-                    if ( ! isset($mapping['inherited'])) {
+                    if (! isset($mapping['inherited'])) {
                         $columnName = $this->quoteStrategy->getColumnName(
                             $mapping['fieldName'],
                             $class,
@@ -227,11 +225,9 @@ class SchemaTool
                             array('onDelete' => 'CASCADE')
                         );
                     }
-
                 }
 
                 $table->setPrimaryKey($pkColumns);
-
             } elseif ($class->isInheritanceTypeTablePerClass()) {
                 throw ORMException::notSupported();
             } else {
@@ -252,7 +248,7 @@ class SchemaTool
                 }
             }
 
-            if ( ! $table->hasIndex('primary')) {
+            if (! $table->hasIndex('primary')) {
                 $table->setPrimaryKey($pkColumns);
             }
 
@@ -279,7 +275,7 @@ class SchemaTool
             if ($class->isIdGeneratorSequence() && $class->name == $class->rootEntityName) {
                 $seqDef     = $class->sequenceGeneratorDefinition;
                 $quotedName = $this->quoteStrategy->getSequenceName($seqDef, $class, $this->platform);
-                if ( ! $schemaSource->hasSequence($quotedName)) {
+                if (! $schemaSource->hasSequence($quotedName)) {
                     $schemaSource->createSequence(
                         $quotedName,
                         $seqDef['allocationSize'],
@@ -296,7 +292,7 @@ class SchemaTool
             }
         }
 
-        if ( ! $this->platform->supportsSchemas() && ! $this->platform->canEmulateSchemas() ) {
+        if (! $this->platform->supportsSchemas() && ! $this->platform->canEmulateSchemas()) {
             $schemaSource->visit(new RemoveNamespacedAssets());
         }
 
@@ -326,7 +322,7 @@ class SchemaTool
     {
         $discrColumn = $class->discriminatorColumn;
 
-        if ( ! isset($discrColumn['type']) ||
+        if (! isset($discrColumn['type']) ||
             (strtolower($discrColumn['type']) == 'string' && $discrColumn['length'] === null)
         ) {
             $discrColumn['type'] = 'string';
@@ -611,13 +607,12 @@ class SchemaTool
         $foreignTableName   = $this->quoteStrategy->getTableName($class, $this->platform);
 
         foreach ($joinColumns as $joinColumn) {
-
             list($definingClass, $referencedFieldName) = $this->getDefiningClass(
                 $class,
                 $joinColumn['referencedColumnName']
             );
 
-            if ( ! $definingClass) {
+            if (! $definingClass) {
                 throw new \Doctrine\ORM\ORMException(
                     "Column name `".$joinColumn['referencedColumnName']."` referenced for relation from ".
                     $mapping['sourceEntity'] . " towards ". $mapping['targetEntity'] . " does not exist."
@@ -635,7 +630,7 @@ class SchemaTool
             $localColumns[]         = $quotedColumnName;
             $foreignColumns[]       = $quotedRefColumnName;
 
-            if ( ! $theJoinTable->hasColumn($quotedColumnName)) {
+            if (! $theJoinTable->hasColumn($quotedColumnName)) {
                 // Only add the column to the table if it does not exist already.
                 // It might exist already if the foreign key is mapped into a regular
                 // property as well.
@@ -723,7 +718,6 @@ class SchemaTool
             try {
                 $conn->executeQuery($sql);
             } catch (\Exception $e) {
-
             }
         }
     }
@@ -775,7 +769,7 @@ class SchemaTool
         $fullSchema = $sm->createSchema();
 
         foreach ($fullSchema->getTables() as $table) {
-            if ( ! $schema->hasTable($table->getName())) {
+            if (! $schema->hasTable($table->getName())) {
                 foreach ($table->getForeignKeys() as $foreignKey) {
                     /* @var $foreignKey \Doctrine\DBAL\Schema\ForeignKeyConstraint */
                     if ($schema->hasTable($foreignKey->getForeignTableName())) {

@@ -80,7 +80,7 @@ EOT
 
         $sourceMetadatas = $sourceEm->getMetadataFactory()->getAllMetadata();
 
-        if ( ! empty($sourceMetadatas)) {
+        if (! empty($sourceMetadatas)) {
             // Create SchemaTool
             $auditTool  = new SchemaTool($auditEm, $sourceEm);
             return $this->execSchemaCommand($input, $output, $auditTool, $sourceMetadatas);
