@@ -11,7 +11,6 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-
         $ems = $container->getParameter('rz.entity_audit.entity_managers');
         $doctrineEms = $container->getParameter('doctrine.entity_managers');
 
@@ -52,7 +51,6 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
                                                                                new Reference($ems['audit'])));
                 $def->setClass($container->getParameter('rz.entity_audit.reader.class'));
                 $definition->setFactory(array($def, 'createAuditReader'));
-
             } else {
                 $def = new Definition('simplethings_entityaudit.reader', array(new Reference($ems['source']),
                                                                                new Reference($ems['audit'])));
@@ -61,7 +59,6 @@ class OverrideServiceCompilerPass implements CompilerPassInterface
                 //$def->setFactoryClass($container->getParameter('rz.entity_audit.manager.class'));
                 $def->setFactoryMethod('createAuditReader');
                 $def->setFactoryService('simplethings_entityaudit.manager');
-
             }
 
             $container->setDefinition('simplethings_entityaudit.reader', $def);

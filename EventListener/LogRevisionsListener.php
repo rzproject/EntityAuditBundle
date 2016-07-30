@@ -90,14 +90,14 @@ class LogRevisionsListener implements EventSubscriber
 
         // get changes => should be already computed here (is a listener)
         $changeset = $this->uow->getEntityChangeSet($entity);
-        foreach ( $this->config->getGlobalIgnoreColumns() as $column ) {
-            if ( isset($changeset[$column]) ) {
+        foreach ($this->config->getGlobalIgnoreColumns() as $column) {
+            if (isset($changeset[$column])) {
                 unset($changeset[$column]);
             }
         }
 
         // if we have no changes left => don't create revision log
-        if ( count($changeset) == 0 ) {
+        if (count($changeset) == 0) {
             return;
         }
 
@@ -113,7 +113,7 @@ class LogRevisionsListener implements EventSubscriber
         $this->platform = $this->conn->getDatabasePlatform();
         $this->revisionId = null; // reset revision
 
-        foreach ($this->uow->getScheduledEntityDeletions() AS $entity) {
+        foreach ($this->uow->getScheduledEntityDeletions() as $entity) {
             $class = $this->sourceEm->getClassMetadata(get_class($entity));
             if (!$this->metadataFactory->isAudited($class->name)) {
                 continue;
@@ -133,7 +133,7 @@ class LogRevisionsListener implements EventSubscriber
     {
         $class = $this->sourceEm->getClassMetadata(get_class($entity));
         $data = $this->uow->getOriginalEntityData($entity);
-        if( $class->isVersioned ){
+        if ($class->isVersioned) {
             $versionField = $class->versionField;
             $data[$versionField] = $class->reflFields[$versionField]->getValue($entity);
         }
@@ -171,8 +171,8 @@ class LogRevisionsListener implements EventSubscriber
 
             $fields = array();
 
-            foreach ($class->associationMappings AS $assoc) {
-                if ( ($assoc['type'] & ClassMetadata::TO_ONE) > 0 && $assoc['isOwningSide']) {
+            foreach ($class->associationMappings as $assoc) {
+                if (($assoc['type'] & ClassMetadata::TO_ONE) > 0 && $assoc['isOwningSide']) {
                     foreach ($assoc['targetToSourceKeyColumns'] as $sourceCol) {
                         $fields[$sourceCol] = true;
                         $sql .= ', ' . $sourceCol;
@@ -181,7 +181,7 @@ class LogRevisionsListener implements EventSubscriber
                 }
             }
 
-            foreach ($class->fieldNames AS $field) {
+            foreach ($class->fieldNames as $field) {
                 if (array_key_exists($field, $fields)) {
                     continue;
                 }
@@ -211,7 +211,7 @@ class LogRevisionsListener implements EventSubscriber
 
         $fields = array();
 
-        foreach ($class->associationMappings AS $field => $assoc) {
+        foreach ($class->associationMappings as $field => $assoc) {
             if (($assoc['type'] & ClassMetadata::TO_ONE) > 0 && $assoc['isOwningSide']) {
                 $targetClass = $this->sourceEm->getClassMetadata($assoc['targetEntity']);
 
@@ -234,7 +234,7 @@ class LogRevisionsListener implements EventSubscriber
             }
         }
 
-        foreach ($class->fieldNames AS $field) {
+        foreach ($class->fieldNames as $field) {
             if (array_key_exists($field, $fields)) {
                 continue;
             }
